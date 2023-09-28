@@ -1,11 +1,11 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 use std::fs::File;
 use std::io::BufReader;
 
 pub mod solve;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Deserialize)]
 pub struct AllKeys {
     row: Vec<Vec<usize>>,
     column: Vec<Vec<usize>>,
@@ -35,6 +35,36 @@ impl AllKeys {
                 print!("{} ", key);
             }
             println!("");
+        }
+    }
+}
+
+#[derive(Clone, Copy)]
+enum CellState {
+    Gray,
+    Black(usize),
+    White(usize),
+}
+
+struct Grid {
+    row_num: usize,
+    column_num: usize,
+    cells: Vec<Vec<CellState>>,
+}
+
+impl Grid {
+    fn new(row_num: usize, column_num: usize) -> Self {
+        let cells;
+        if row_num == 0 || column_num == 0 {
+            panic!("cannot make a grid");
+        } else {
+            cells = vec![vec![CellState::Gray; column_num]; row_num];
+        }
+
+        Self {
+            row_num,
+            column_num,
+            cells,
         }
     }
 }
