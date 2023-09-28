@@ -13,10 +13,12 @@ pub struct AllKeys {
 
 impl AllKeys {
     pub fn new(name: &str) -> Self {
-        let file = File::open(format!("keys/{}.json", name)).unwrap();
+        let file = File::open(format!("keys/{}.json", name))
+            .expect(format!("Cannot open keys/{}.json", name).as_str());
+
         let reader = BufReader::new(file);
 
-        serde_json::from_reader(reader).unwrap()
+        serde_json::from_reader(reader).expect("The JSON file has an unexpected structure")
     }
 
     pub fn show(&self) {
@@ -56,7 +58,7 @@ impl Grid {
     fn new(row_num: usize, column_num: usize) -> Self {
         let cells;
         if row_num == 0 || column_num == 0 {
-            panic!("cannot make a grid");
+            panic!("Cannot generate a grid");
         } else {
             cells = vec![vec![CellState::Gray; column_num]; row_num];
         }
