@@ -12,7 +12,7 @@ pub struct AllKeys {
 }
 
 impl AllKeys {
-    pub fn new(name: &str) -> Self {
+    fn new(name: &str) -> Self {
         let file = File::open(format!("keys/{}.json", name))
             .expect(format!("Cannot open keys/{}.json", name).as_str());
 
@@ -21,7 +21,7 @@ impl AllKeys {
         serde_json::from_reader(reader).expect("The JSON file has an unexpected structure")
     }
 
-    pub fn show(&self) {
+    fn show(&self) {
         println!("row");
         for keys in self.row.iter() {
             for key in keys.iter() {
@@ -68,5 +68,34 @@ impl Grid {
             column_num,
             cells,
         }
+    }
+
+    fn show(&self) {
+        print!(" ");
+        for _ in 0..self.column_num {
+            print!("__");
+        }
+        println!("");
+
+        for row_line in self.cells.iter() {
+            print!("|");
+            for cell in row_line.iter() {
+                print!(
+                    "{}",
+                    match cell {
+                        CellState::Gray => "\x1b[100m  ",
+                        CellState::Black(_) => "\x1b[40m  ",
+                        CellState::White(_) => "\x1b[107m  ",
+                    }
+                )
+            }
+            println!("\x1b[0m|");
+        }
+
+        print!(" ");
+        for _ in 0..self.column_num {
+            print!("‾‾");
+        }
+        println!("");
     }
 }
