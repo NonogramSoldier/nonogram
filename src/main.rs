@@ -1,3 +1,6 @@
+mod picross;
+
 fn main() {
-    println!("Hello, world!");
+    let all_keys = picross::AllKeys::new("mouse");
+    all_keys.show();
 }
