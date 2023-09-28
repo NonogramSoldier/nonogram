@@ -99,3 +99,31 @@ impl Grid {
         println!("");
     }
 }
+
+pub struct Board {
+    name: String,
+    all_keys: AllKeys,
+    grid: Grid,
+}
+
+impl Board {
+    pub fn new(name: &str) -> Self {
+        let all_keys = AllKeys::new(name);
+        let grid = Grid::new(all_keys.row.len(), all_keys.column.len());
+        let name = name.to_string();
+
+        Self {
+            name,
+            all_keys,
+            grid,
+        }
+    }
+
+    pub fn show_all_keys(&self) {
+        self.all_keys.show();
+    }
+
+    pub fn show_grid(&self) {
+        self.grid.show();
+    }
+}
