@@ -6,17 +6,67 @@ enum SolveResult {
     OnlyOneAnswer,
 }
 
+struct Position {
+    row_index: usize,
+    column_index: usize,
+}
+
+impl Position {
+    fn new(row_index: usize, column_index: usize) -> Self {
+        Self {
+            row_index,
+            column_index,
+        }
+    }
+}
+
+struct Layer {
+    branch_position: Position,
+    held_grid: Option<Grid>,
+}
+
+impl Layer {
+    fn new(branch_position: Position) -> Self {
+        Self {
+            branch_position,
+            held_grid: None,
+        }
+    }
+
+    fn hold(&mut self, grid: Grid) {
+        self.held_grid = Some(grid);
+    }
+}
+
+struct LayerStack {
+    vector: Vec<Layer>,
+}
+
+impl LayerStack {
+    fn new() -> Self {
+        Self { vector: Vec::new() }
+    }
+
+    fn get_num(&self) -> usize {
+        self.vector.len()
+    }
+}
+
 struct Solver<'a> {
     board_grid: &'a mut Grid,
     solver_grid: Grid,
+    layer_stack: LayerStack,
 }
 
 impl<'a> Solver<'a> {
     pub fn new(board: &'a mut Board) -> Self {
         let solver_grid = Grid::new(board.grid.row_num, board.grid.column_num);
+        let layer_stack = LayerStack::new();
+
         Self {
             board_grid: &mut board.grid,
             solver_grid,
+            layer_stack,
         }
     }
 
@@ -25,7 +75,11 @@ impl<'a> Solver<'a> {
     }
 
     fn is_base_layer(&self) -> bool {
-        true
+        if self.layer_stack.get_num() == 0 {
+            true
+        } else {
+            false
+        }
     }
 
     fn is_changed(&self) -> bool {
