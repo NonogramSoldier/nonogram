@@ -6,6 +6,20 @@ enum SolveResult {
     OnlyOneAnswer,
 }
 
+enum Direction {
+    Row,
+    Column,
+}
+
+impl Direction {
+    fn switch(&mut self) {
+        match self {
+            Direction::Row => *self = Direction::Column,
+            Direction::Column => *self = Direction::Row,
+        }
+    }
+}
+
 struct Position {
     row_index: usize,
     column_index: usize,
@@ -56,6 +70,7 @@ struct Solver<'a> {
     board_grid: &'a mut Grid,
     solver_grid: Grid,
     layer_stack: LayerStack,
+    direction: Direction,
 }
 
 impl<'a> Solver<'a> {
@@ -67,11 +82,14 @@ impl<'a> Solver<'a> {
             board_grid: &mut board.grid,
             solver_grid,
             layer_stack,
+            direction: Direction::Row,
         }
     }
 
     fn init(&mut self) {
         self.solver_grid = Grid::new(self.board_grid.row_num, self.board_grid.column_num);
+        self.layer_stack = LayerStack::new();
+        self.direction = Direction::Row;
     }
 
     fn is_base_layer(&self) -> bool {
@@ -98,7 +116,9 @@ impl<'a> Solver<'a> {
         true
     }
 
-    fn direction_switch(&mut self) {}
+    fn direction_switch(&mut self) {
+        self.direction.switch();
+    }
 
     fn peel_off(&mut self) {}
 
