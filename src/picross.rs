@@ -6,7 +6,7 @@ use std::io::BufReader;
 pub mod solve;
 
 #[derive(Deserialize)]
-pub struct AllKeys {
+struct AllKeys {
     row: Vec<Vec<usize>>,
     column: Vec<Vec<usize>>,
 }
@@ -18,7 +18,21 @@ impl AllKeys {
 
         let reader = BufReader::new(file);
 
-        serde_json::from_reader(reader).expect("The JSON file has an unexpected structure")
+        let mut all_keys: AllKeys =
+            serde_json::from_reader(reader).expect("The JSON file has an unexpected structure");
+
+        all_keys.remove0();
+
+        all_keys
+    }
+
+    fn remove0(&mut self) {
+        for index in 0..self.row.len() {
+            self.row[index].retain(|&x| x != 0);
+        }
+        for index in 0..self.column.len() {
+            self.column[index].retain(|&x| x != 0);
+        }
     }
 
     fn show(&self) {
