@@ -58,8 +58,8 @@ impl AllKeys {
 #[derive(Clone, Copy)]
 enum CellState {
     Gray,
-    Black(usize),
-    White(usize),
+    Black,
+    White,
 }
 
 struct Grid {
@@ -98,8 +98,8 @@ impl Grid {
                     "{}",
                     match cell {
                         CellState::Gray => "\x1b[100m  ",
-                        CellState::Black(_) => "\x1b[40m  ",
-                        CellState::White(_) => "\x1b[107m  ",
+                        CellState::Black => "\x1b[40m  ",
+                        CellState::White => "\x1b[107m  ",
                     }
                 )
             }
