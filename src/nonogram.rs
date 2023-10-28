@@ -26,7 +26,7 @@ impl AllKeys {
         all_keys
     }
 
-    fn remove0(&mut self) {
+    fn remove0(&mut self) { // check_keys関数に統合する
         for index in 0..self.row.len() {
             self.row[index].retain(|&x| x != 0);
         }

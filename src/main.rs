@@ -1,6 +1,6 @@
-use picross::*;
+use nonogram::*;
 
-mod picross;
+mod nonogram;
 
 fn main() {
     let board = Board::new("mouse");
