@@ -26,7 +26,8 @@ impl AllKeys {
         all_keys
     }
 
-    fn remove0(&mut self) { // check_keys関数に統合する
+    fn remove0(&mut self) {
+        // check_keys関数に統合する
         for index in 0..self.row.len() {
             self.row[index].retain(|&x| x != 0);
         }
@@ -56,25 +57,33 @@ impl AllKeys {
 }
 
 #[derive(Clone, Copy)]
-enum CellState {
-    Gray,
+enum Color {
     Black,
     White,
+}
+
+impl Color {
+    fn oposite(&self) -> Color {
+        match self {
+            Color::Black => Color::White,
+            Color::White => Color::Black,
+        }
+    }
 }
 
 struct Grid {
     row_num: usize,
     column_num: usize,
-    cells: Vec<Vec<CellState>>,
+    cells: Vec<Vec<Option<Color>>>,
 }
 
 impl Grid {
     fn new(row_num: usize, column_num: usize) -> Self {
         let cells;
         if row_num == 0 || column_num == 0 {
-            panic!("Cannot generate a grid");
+            panic!("Grid::new(): cannot generate a grid");
         } else {
-            cells = vec![vec![CellState::Gray; column_num]; row_num];
+            cells = vec![vec![Option::None; column_num]; row_num];
         }
 
         Self {
@@ -97,9 +106,13 @@ impl Grid {
                 print!(
                     "{}",
                     match cell {
-                        CellState::Gray => "\x1b[100m  ",
-                        CellState::Black => "\x1b[40m  ",
-                        CellState::White => "\x1b[107m  ",
+                        Option::None => "\x1b[100m  ",
+                        Option::Some(color) => {
+                            match color {
+                                Color::Black => "\x1b[40m  ",
+                                Color::White => "\x1b[107m  ",
+                            }
+                        }
                     }
                 )
             }
